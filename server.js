@@ -7,20 +7,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// ✅ Middleware
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+}));
 app.use(express.json());
 
-// Routes
+// ✅ Routes
 const authRoutes = require("./routes/authRoutes");
 const jobRoutes = require("./routes/jobRoutes");
 
-app.use("/api/auth", authRoutes);
-app.use("/api/jobs", jobRoutes);
+app.use("/api/job-tracker/auth", authRoutes);
+app.use("/api/job-tracker/jobs", jobRoutes);
 
-// MongoDB Connection
+// ✅ MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
-    dbName: "job-tracker", // 👈 ensures data goes into the correct DB
+    dbName: "job-tracker",
 })
     .then(() => {
         console.log("✅ Connected to MongoDB");
