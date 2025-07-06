@@ -11,9 +11,9 @@ const PORT = process.env.PORT || 5000;
 app.use(
     cors({
         origin: [
-            'http://localhost:3000', // local dev
-            'https://abode-next.vercel.app', // ✅ production
-            'https://abode-next-git-main-trivedi26s-projects.vercel.app' // optional preview
+            "http://localhost:3000", // local dev
+            "https://abode-next.vercel.app", // production
+            "https://abode-next-git-main-trivedi26s-projects.vercel.app", // optional preview
         ],
         credentials: true,
     })
@@ -24,14 +24,17 @@ app.use(express.json());
 // ✅ Routes
 const authRoutes = require("./routes/authRoutes");
 const jobRoutes = require("./routes/jobRoutes");
+const userRoutes = require("./routes/userRoutes"); // ✅ NEW
 
 app.use("/api/job-tracker/auth", authRoutes);
 app.use("/api/job-tracker/jobs", jobRoutes);
+app.use("/api/job-tracker/user", userRoutes); // ✅ NEW
 
 // ✅ MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, {
-    dbName: "job-tracker",
-})
+mongoose
+    .connect(process.env.MONGODB_URI, {
+        dbName: "job-tracker",
+    })
     .then(() => {
         console.log("✅ Connected to MongoDB");
         console.log("🧠 Using DB:", mongoose.connection.name);
