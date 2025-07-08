@@ -11,11 +11,22 @@ const protect = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = { id: decoded.id };
+        req.user = {
+            id: decoded.id,
+            role: decoded.role, // ✅ Attach role
+        };
         next();
     } catch (err) {
         return res.status(401).json({ message: "Invalid token" });
     }
 };
 
-module.exports = { protect };
+// ✅ Optional: Restrict to employer only
+const employerOnly = (req, res, next) => {
+    if (req.user.role !== 'employer') {
+        return res.status(403).json({ message: "Access denied. Employer only." });
+    }
+    next();
+};
+
+module.exports = { protect, employerOnly };

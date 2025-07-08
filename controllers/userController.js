@@ -23,6 +23,7 @@ const updateProfile = async (req, res) => {
     try {
         const updates = {
             name: req.body.name,
+            email: req.body.email, // ✅ Allow email update
             phone: req.body.phone,
             location: req.body.location,
             bio: req.body.bio,
@@ -37,14 +38,18 @@ const updateProfile = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json(user);
+        res.status(200).json({ message: 'Profile updated successfully', user });
     } catch (error) {
+        // ✅ Handle duplicate email error
+        if (error.code === 11000 && error.keyPattern?.email) {
+            return res.status(400).json({ message: 'Email already in use' });
+        }
+
         console.error('Error updating profile:', error.message);
         res.status(500).json({ message: 'Profile update failed', error: error.message });
     }
 };
 
-// ✅ Export using module.exports
 module.exports = {
     getMe,
     updateProfile,
