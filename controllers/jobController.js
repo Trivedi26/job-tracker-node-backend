@@ -27,7 +27,7 @@ const updateJob = async (req, res) => {
         const updatedJob = await Job.findByIdAndUpdate(id, req.body, { new: true });
         res.status(200).json(updatedJob);
     } catch (error) {
-        res.status(500).json({ message: "Failed to update job", error });
+        res.status(500).json({ message: "Failed to Update job", error });
     }
 };
 
